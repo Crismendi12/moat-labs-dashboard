@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOAT Labs Command Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Google Analytics (GA4) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-KH5HDFZVTR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-KH5HDFZVTR');
+  </script>
+</head>
+<body>
+  <div class="top-gradient"></div>
+  <div class="loading-bar" id="loadingBar"></div>
+  <div class="refresh-toast" id="refreshToast">Data refreshed</div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-mark">M</span>
+        <span class="brand-text">MOAT <span class="brand-accent">LABS</span></span>
+      </div>
+      <div class="topbar-right">
+        <span class="topbar-label">Command Center</span>
+        <button class="config-toggle" id="configToggle" aria-label="Settings" aria-expanded="false">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        </button>
+        <a href="/logout" class="logout-btn" aria-label="Sign out" title="Sign out">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="config-panel" id="configPanel">
+    <div class="config-inner">
+      <div class="config-row">
+        <label for="sheetId">Google Sheet ID</label>
+        <div class="config-input-group">
+          <input type="text" id="sheetId" placeholder="e.g. 1abc...xyz" spellcheck="false">
+          <button id="connectBtn" class="btn-primary">Connect</button>
+          <button id="disconnectBtn" class="btn-ghost" style="display:none;">Disconnect</button>
+        </div>
+        <p class="config-hint">Sheet must be publicly shared (Anyone with the link can view). Tabs: Pipeline, Contenido, Metricas.</p>
+      </div>
+      <div class="config-status" id="configStatus"></div>
+    </div>
+  </div>
+
+  <nav class="app-tabs" id="appTabs">
+    <button class="app-tab app-tab--active" data-tab="ventas">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Ventas
+    </button>
+    <button class="app-tab" data-tab="finanzas">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Finanzas
+    </button>
+    <button class="app-tab" data-tab="contenido">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Contenido
+    </button>
+    <button class="app-tab" data-tab="operaciones">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Operaciones
+    </button>
+  </nav>
+
+  <main class="dashboard">
+    <!-- === VENTAS TAB === -->
+    <!-- KPI Cards -->
+    <section class="kpi-grid" data-tab="ventas">
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon--leads">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-value" id="kpiLeads">--</span>
+          <span class="kpi-label">Total Leads</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon--calls">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-value" id="kpiCalls">--</span>
+          <span class="kpi-label">Calls This Week</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon--proposals">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-value" id="kpiProposals">--</span>
+          <span class="kpi-label">Closing Deals</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon--pipeline">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-value" id="kpiPipeline">--</span>
+          <span class="kpi-label">Pipeline Value</span>
+        </div>
+      </div>
+      <div class="kpi-card kpi-card--target">
+        <div class="kpi-icon kpi-icon--target">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-value" id="kpiRevenue">--</span>
+          <span class="kpi-label">Revenue vs $100K Target</span>
+          <div class="kpi-progress">
+            <div class="kpi-progress-bar" id="kpiRevenueBar"></div>
+          </div>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon kpi-icon--velocity">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="kpi-content">
+          <span class="kpi-value" id="kpiWinRate">--</span>
+          <span class="kpi-label">Win Rate</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pipeline Funnel -->
+    <section class="card" data-tab="ventas">
+      <div class="card-header">
+        <h2>Pipeline Funnel</h2>
+        <span class="card-badge" id="pipelineTotal">0 deals</span>
+      </div>
+      <div class="funnel" id="funnel"></div>
+      <div class="funnel-legend" id="funnelLegend"></div>
+    </section>
+
+    <!-- Intel Briefs -->
+    <section class="card intel-section" data-tab="ventas">
+      <div class="card-header">
+        <h2>Intel Briefs</h2>
+        <span class="card-badge" id="intelCount">0 deals</span>
+      </div>
+      <div class="intel-deals" id="intelDeals">
+        <div class="empty-state">Loading pipeline...</div>
+      </div>
+    </section>
+
+    <!-- Intel Modal -->
+    <div class="intel-modal-overlay" id="intelOverlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="intelModalTitle">
+      <div class="intel-modal">
+        <div class="intel-modal-header">
+          <h3 id="intelModalTitle">Intel Brief</h3>
+          <button class="intel-modal-close" id="intelClose" aria-label="Close">&times;</button>
+        </div>
+        <div class="intel-modal-body" id="intelModalBody">
+          <div class="intel-loading">Generating brief...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outbound Queue -->
+    <section class="card outbound-section" data-tab="ventas">
+      <div class="card-header">
+        <h2>Outbound Queue</h2>
+        <div class="ob-header-right">
+          <span class="ob-legend"><span class="ob-score ob-score--hot">85+</span> Hot <span class="ob-score ob-score--warm">70+</span> Warm <span class="ob-score ob-score--cold">&lt;70</span> Cold</span>
+          <span class="card-badge" id="outboundCount">0</span>
+        </div>
+      </div>
+      <div class="ob-funnel" id="obFunnel"></div>
+      <div class="ob-metrics" id="obMetrics"></div>
+      <div class="ob-filters" id="obFilters" role="tablist" aria-label="Outbound stage filters">
+        <button class="ob-filter ob-filter--active" data-stage="all" role="tab" aria-selected="true" tabindex="0">All</button>
+        <button class="ob-filter" data-stage="nuevo" role="tab" aria-selected="false" tabindex="-1">Nuevo</button>
+        <button class="ob-filter" data-stage="contactado" role="tab" aria-selected="false" tabindex="-1">Contactado</button>
+        <button class="ob-filter" data-stage="respondio" role="tab" aria-selected="false" tabindex="-1">Respondio</button>
+        <button class="ob-filter" data-stage="reunion" role="tab" aria-selected="false" tabindex="-1">Reunion</button>
+        <button class="ob-filter" data-stage="convertido" role="tab" aria-selected="false" tabindex="-1">Convertido</button>
+      </div>
+      <div class="outbound-list" id="outboundList">
+        <div class="empty-state">Loading outbound prospects...</div>
+      </div>
+    </section>
+
+    <!-- Prospecting -->
+    <section class="card prospecting-section" data-tab="ventas">
+      <div class="card-header">
+        <h2>Prospecting</h2>
+        <span class="card-badge" id="prospectingCount">0 leads</span>
+      </div>
+      <div class="prospecting-list" id="prospectingList">
+        <div class="empty-state">Loading prospecting data...</div>
+      </div>
+    </section>
+
+    <!-- Contact Segments -->
+    <section class="card segments-section" data-tab="ventas">
+      <div class="card-header">
+        <h2>Contact Segments</h2>
+        <span class="card-badge" id="segmentsTotal">0 contacts</span>
+      </div>
+      <div class="seg-summary" id="segSummary"></div>
+      <div class="seg-detail" id="segDetail"></div>
+    </section>
+
+    <!-- === FINANZAS TAB === -->
+    <!-- Contabilidad Section -->
+    <section class="card contab-section" data-tab="finanzas">
+      <div class="card-header">
+        <h2>Contabilidad</h2>
+      </div>
+      <div class="contab-summary">
+        <div class="contab-summary-item">
+          <span class="contab-summary-label">Cobrado</span>
+          <span class="contab-summary-value contab-summary--green" id="totalIngresos">$0</span>
+        </div>
+        <div class="contab-summary-item">
+          <span class="contab-summary-label">Pendiente</span>
+          <span class="contab-summary-value contab-summary--orange" id="totalPendiente">$0</span>
+        </div>
+        <div class="contab-summary-item">
+          <span class="contab-summary-label">Gastos/mes</span>
+          <span class="contab-summary-value contab-summary--red" id="totalGastos">$0</span>
+        </div>
+        <div class="contab-summary-item">
+          <span class="contab-summary-label">Balance</span>
+          <span class="contab-summary-value" id="balanceNeto">$0</span>
+        </div>
+      </div>
+      <div class="contab-columns">
+        <div class="contab-col">
+          <h3 class="contab-col-title">Ingresos (Clientes)</h3>
+          <div class="contab-list" id="ingresosList">
+            <div class="empty-state">Loading...</div>
+          </div>
+        </div>
+        <div class="contab-col">
+          <h3 class="contab-col-title">Gastos (Herramientas)</h3>
+          <div class="contab-list" id="gastosList">
+            <div class="empty-state">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cascada Financiera -->
+    <section class="card cascada-section" data-tab="finanzas">
+      <div class="card-header">
+        <h2>Cascada Financiera</h2>
+        <span class="card-badge" id="cascadaCurrency">USD / COP</span>
+      </div>
+      <div class="cascada-summary" id="cascadaSummary">
+        <div class="cascada-summary-item">
+          <span class="cascada-summary-label">Obligaciones</span>
+          <span class="cascada-summary-value cascada--red" id="cascObligaciones">$0</span>
+        </div>
+        <div class="cascada-summary-item">
+          <span class="cascada-summary-label">Neto USD</span>
+          <span class="cascada-summary-value" id="cascNetoUSD">$0</span>
+        </div>
+        <div class="cascada-summary-item">
+          <span class="cascada-summary-label">Neto COP</span>
+          <span class="cascada-summary-value" id="cascNetoCOP">$0</span>
+        </div>
+      </div>
+      <div class="cascada-waterfall" id="cascadaWaterfall"></div>
+      <div class="cascada-pending" id="cascadaPending"></div>
+    </section>
+
+    <!-- === CONTENIDO TAB === -->
+    <!-- Web Analytics -->
+    <section class="card wa-section" data-tab="contenido">
+      <div class="card-header">
+        <h2>Web Analytics</h2>
+        <span class="card-badge" id="waPeriod">Last 7 days</span>
+      </div>
+      <div class="wa-kpis" id="waKpis"></div>
+      <div class="wa-grid">
+        <div class="wa-sources">
+          <h4 class="wa-subtitle">Traffic Sources</h4>
+          <div id="waSources"></div>
+        </div>
+        <div class="wa-pages">
+          <h4 class="wa-subtitle">Top Pages</h4>
+          <div id="waPages"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Content Calendar -->
+    <section class="card" data-tab="contenido">
+      <div class="card-header">
+        <h2>Content Calendar</h2>
+      </div>
+      <div class="content-list" id="contentList">
+        <div class="empty-state">No content scheduled</div>
+      </div>
+    </section>
+
+    <!-- LinkedIn + Content Performance -->
+    <section class="card" data-tab="contenido">
+      <div class="card-header">
+        <h2>LinkedIn Performance</h2>
+        <span class="card-badge" id="liPeriod">This Week</span>
+      </div>
+      <div class="li-kpis" id="liKpis">
+        <div class="li-kpi">
+          <span class="li-kpi-value" id="liImpressions">--</span>
+          <span class="li-kpi-label">Impressions</span>
+          <span class="li-kpi-trend" id="liImpressionsTrend"></span>
+        </div>
+        <div class="li-kpi">
+          <span class="li-kpi-value" id="liEngagement">--</span>
+          <span class="li-kpi-label">Engagement Rate</span>
+          <span class="li-kpi-trend" id="liEngagementTrend"></span>
+        </div>
+        <div class="li-kpi">
+          <span class="li-kpi-value" id="liContentLeads">--</span>
+          <span class="li-kpi-label">Content Leads</span>
+          <span class="li-kpi-trend" id="liContentLeadsTrend"></span>
+        </div>
+        <div class="li-kpi">
+          <span class="li-kpi-value" id="liPosts">--</span>
+          <span class="li-kpi-label">Posts Published</span>
+          <span class="li-kpi-trend" id="liPostsTrend"></span>
+        </div>
+      </div>
+      <div class="li-top-posts" id="liTopPosts"></div>
+    </section>
+
+    <!-- SSI Score -->
+    <section class="card" data-tab="contenido">
+      <div class="card-header">
+        <h2>Social Selling Index (SSI)</h2>
+        <span class="card-badge">Top 4% in industry</span>
+      </div>
+      <div class="ssi-layout" id="ssiLayout"></div>
+    </section>
+
+    <!-- Audience Insights -->
+    <section class="card" data-tab="contenido">
+      <div class="card-header">
+        <h2>Audience Insights</h2>
+        <span class="card-badge" id="audienceBadge">9,563 followers</span>
+      </div>
+      <div class="audience-summary" id="audienceSummary">
+        <div class="audience-stat">
+          <span class="audience-stat-value">27%</span>
+          <span class="audience-stat-label">Founders & C-Suite</span>
+        </div>
+        <div class="audience-stat">
+          <span class="audience-stat-value">49%</span>
+          <span class="audience-stat-label">Companies 1-50</span>
+        </div>
+        <div class="audience-stat">
+          <span class="audience-stat-value">44%</span>
+          <span class="audience-stat-label">Tech, Consulting & Finance</span>
+        </div>
+        <div class="audience-stat">
+          <span class="audience-stat-value">62.6%</span>
+          <span class="audience-stat-label">Senior+ Level</span>
+        </div>
+      </div>
+      <div class="audience-grid" id="audienceGrid"></div>
+    </section>
+
+    <!-- === OPERACIONES TAB === -->
+    <!-- Follow-ups Pendientes (logically belongs with Ventas) -->
+    <section class="card" data-tab="ventas">
+      <div class="card-header">
+        <h2>Follow-ups Pendientes</h2>
+        <span class="card-badge card-badge--warning" id="followupCount">0</span>
+      </div>
+      <div class="followups-list" id="followupsList">
+        <div class="empty-state">No follow-ups pending</div>
+      </div>
+    </section>
+
+    <!-- Sales Velocity -->
+    <section class="card" data-tab="operaciones">
+      <div class="card-header">
+        <h2>Sales Velocity</h2>
+      </div>
+      <div class="velocity-grid">
+        <div class="vel-funnel">
+          <div class="vel-stage">
+            <div class="vel-stage-bar vel-bar--lead" id="velBarLead"></div>
+            <span class="vel-stage-label">Lead</span>
+            <span class="vel-stage-count" id="velLead">0</span>
+          </div>
+          <div class="vel-arrow">></div>
+          <div class="vel-stage">
+            <div class="vel-stage-bar vel-bar--meeting" id="velBarMeeting"></div>
+            <span class="vel-stage-label">Meeting</span>
+            <span class="vel-stage-count" id="velMeeting">0</span>
+          </div>
+          <div class="vel-arrow">></div>
+          <div class="vel-stage">
+            <div class="vel-stage-bar vel-bar--closing" id="velBarClosing"></div>
+            <span class="vel-stage-label">Proposal</span>
+            <span class="vel-stage-count" id="velClosing">0</span>
+          </div>
+          <div class="vel-arrow">></div>
+          <div class="vel-stage">
+            <div class="vel-stage-bar vel-bar--win" id="velBarWin"></div>
+            <span class="vel-stage-label">Won</span>
+            <span class="vel-stage-count" id="velWin">0</span>
+          </div>
+        </div>
+        <div class="vel-metrics">
+          <div class="vel-metric">
+            <span class="vel-metric-value" id="velConvRate">--%</span>
+            <span class="vel-metric-label">Lead-to-Win</span>
+          </div>
+          <div class="vel-metric">
+            <span class="vel-metric-value" id="velAvgDeal">$--</span>
+            <span class="vel-metric-label">Avg Deal Size</span>
+          </div>
+          <div class="vel-metric">
+            <span class="vel-metric-value" id="velCostPerLead">$--</span>
+            <span class="vel-metric-label">Cost per Lead</span>
+          </div>
+          <div class="vel-metric">
+            <span class="vel-metric-value" id="velContentROI">--x</span>
+            <span class="vel-metric-label">Content ROI</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Weekly Metrics Chart -->
+    <section class="card" data-tab="operaciones">
+      <div class="card-header">
+        <h2>Weekly Metrics</h2>
+      </div>
+      <div class="chart-container" id="chartContainer">
+        <div class="chart-legend" id="chartLegend"></div>
+        <div class="chart" id="chart"></div>
+        <div class="chart-revenue" id="chartRevenue"></div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="card" data-tab="operaciones">
+      <div class="card-header">
+        <h2>Quick Actions</h2>
+      </div>
+      <div class="quick-actions" id="quickActions">
+        <a href="https://docs.google.com/spreadsheets/d/1VcCoM6Un9G5XLddgvPCqc5dj4UCDpI_y76PIUM8fGIo" target="_blank" class="qa-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+          <span>Google Sheet</span>
+        </a>
+        <a href="https://us2.make.com/organization/3055410/team/512246/scenarios" target="_blank" class="qa-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <span>Make.com Scenarios</span>
+        </a>
+        <a href="https://vercel.com/cristianmendivelso-6926s-projects/moat-labs-dashboard" target="_blank" class="qa-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 22 20 2 20"/></svg>
+          <span>Vercel Dashboard</span>
+        </a>
+        <a href="https://analytics.google.com" target="_blank" class="qa-link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Google Analytics</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Revenue Forecast -->
+    <section class="card forecast-section" data-tab="finanzas">
+      <div class="card-header">
+        <h2>Revenue Forecast</h2>
+        <span class="card-badge" id="forecastPeriod">3-Month Outlook</span>
+      </div>
+      <div class="forecast-summary" id="forecastSummary"></div>
+      <div class="forecast-bars" id="forecastBars"></div>
+      <div class="forecast-details" id="forecastDetails"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-left">
+      <span class="footer-status-dot footer-status-dot--demo" id="footerDot"></span>
+      <span id="dataSource">Demo data</span>
+      <span class="footer-dot"></span>
+      <span id="lastUpdate">Last updated: --</span>
+    </div>
+    <span>MOAT Labs Command Center</span>
+  </footer>
+
+  <div aria-live="polite" id="liveRegion" class="sr-only"></div>
+
+  <div id="quickBar" class="quick-bar">
+    <button class="qb-btn" data-action="review" id="qbReview">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      <span class="qb-label">Review</span>
+      <span class="qb-badge" id="qbReviewCount">0</span>
+    </button>
+    <button class="qb-btn" data-action="responses" id="qbResponses">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="qb-label">Responses</span>
+      <span class="qb-badge qb-badge--urgent" id="qbResponseCount">0</span>
+    </button>
+    <button class="qb-btn" data-action="pipeline" id="qbPipeline">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span class="qb-label">Pipeline</span>
+      <span class="qb-badge" id="qbPipelineVal">$0</span>
+    </button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

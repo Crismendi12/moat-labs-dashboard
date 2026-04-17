@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MOAT Labs — Ecosystem de Automatización</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0a0a0f;
+    color: #e0e0e0;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+  h1 {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    text-align: center;
+    color: #6b7280;
+    font-size: 13px;
+    letter-spacing: 1px;
+    margin-bottom: 48px;
+    text-transform: uppercase;
+  }
+  .root {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  .root-box {
+    background: linear-gradient(135deg, #7c3aed, #4f46e5);
+    color: #fff;
+    padding: 18px 48px;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(124,58,237,0.4);
+  }
+  .connector-root {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0;
+  }
+  .connector-root::before {
+    content: '';
+    width: 2px;
+    height: 32px;
+    background: #374151;
+    display: block;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .area {
+    background: #111827;
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid #1f2937;
+    position: relative;
+  }
+  .area-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1f2937;
+  }
+  .area-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .area-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    background: #0f172a;
+    border: 1px solid #1e293b;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+  .item:last-child { margin-bottom: 0; }
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .make { background: rgba(99,102,241,0.2); color: #818cf8; }
+  .ai   { background: rgba(16,185,129,0.2); color: #34d399; }
+  .dev  { background: rgba(245,158,11,0.2); color: #fbbf24; }
+  /* Colors per area */
+  .c1 .area-icon  { background: rgba(239,68,68,0.15); }
+  .c1 .area-title { color: #f87171; }
+  .c1 .dot        { background: #f87171; }
+  .c2 .area-icon  { background: rgba(251,146,60,0.15); }
+  .c2 .area-title { color: #fb923c; }
+  .c2 .dot        { background: #fb923c; }
+  .c3 .area-icon  { background: rgba(250,204,21,0.15); }
+  .c3 .area-title { color: #facc15; }
+  .c3 .dot        { background: #facc15; }
+  .c4 .area-icon  { background: rgba(74,222,128,0.15); }
+  .c4 .area-title { color: #4ade80; }
+  .c4 .dot        { background: #4ade80; }
+  .c5 .area-icon  { background: rgba(56,189,248,0.15); }
+  .c5 .area-title { color: #38bdf8; }
+  .c5 .dot        { background: #38bdf8; }
+  .c6 .area-icon  { background: rgba(167,139,250,0.15); }
+  .c6 .area-title { color: #a78bfa; }
+  .c6 .dot        { background: #a78bfa; }
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #6b7280;
+  }
+  .total-bar {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 13px;
+    color: #4b5563;
+    letter-spacing: 1px;
+  }
+  .total-bar span {
+    color: #a78bfa;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<h1>MOAT Labs</h1>
+<p class="subtitle">Ecosystem de Automatización · IA · Desarrollo</p>
+
+<div class="root">
+  <div class="root-box">MOAT Labs Ventures</div>
+</div>
+
+<div class="grid">
+
+  <!-- 1. Generación de Leads -->
+  <div class="area c1">
+    <div class="area-header">
+      <div class="area-icon">🎯</div>
+      <div class="area-title">Generación de Leads</div>
+    </div>
+    <div class="item"><div class="dot"></div><span>Bot prospección LinkedIn</span><span class="tag make">Make</span></div>
+    <div class="item"><div class="dot"></div><span>Scraper startups en fundraising</span><span class="tag dev">Dev</span></div>
+    <div class="item"><div class="dot"></div><span>Enriquecimiento de perfiles con AI</span><span class="tag ai">AI</span></div>
+    <div class="item"><div class="dot"></div><span>Lead scoring automático</span><span class="tag ai">AI</span></div>
+    <div class="item"><div class="dot"></div><span>Formulario web → CRM automático</span><span class="tag make">Make</span></div>
+  </div>
+
+  <!-- 2. Ventas y Cierre -->
+  <div class="area c2">
+    <div class="area-header">
+      <div class="area-icon">💼</div>
+      <div class="area-title">Ventas y Cierre</div>
+    </div>
+    <div class="item"><div class="dot"></div><span>CRM automatizado Notion / Sheets</span><span class="tag make">Make</span></div>
+    <div class="item"><div class="dot"></div><span>Secuencias de email outreach</span><span class="tag make">Make</span></div>
+    <div class="item"><div class="dot"></div><span>Propuesta automática por módulo</span><span class="tag ai">AI</span></div>
+    <div class="item"><div class="dot"></div><span>Follow-up bot inteligente</span><span class="tag ai">AI</span></div>
+    <div class="item"><div class="dot"></div><span>Alertas Slack de oportunidades</span><span class="tag make">Make</span></div>
+  </div>
+
+  <!-- 3. Onboarding -->
+  <div class="area c3">
+    <div class="area-header">
+      <div class="area-icon">🚀</div>
+      <div class="area-title">Onboarding de Clientes</div>
+    </div>
+    <div class="item"><div class="dot"></div><span>Flujo automático post-pago</span><span class="tag make">Make</span></div>
+    <div class="item"><div class="dot"></div><span>Workspace Notion por cliente</span><span class="tag make">Make</span></div>
+    <div class="item"><div class="dot"></div><span>Email de bienvenida personalizado</span><span class="tag ai">AI</span></div>
+    <div class="item"><div class="dot"></div><span>Kickoff checklist automático</span><span class="tag make">Make</span></div>
+    <div class="item"><div class="dot"></div><span>Template por módulo contratado</span><span class="tag make">Make</span></div>
+  </div>
+
+  <!-- 4. Delivery / Operaciones -->
+  <div class="area c4">
+    <div class="area-header">
+      <div class="area-icon">⚙️</div>
+      <div class="area-title">Delivery / Operaciones</div>
+    </div>
+    <div class="item"><div class="dot"></div><span>Bot análisis MOAT con AI</span><span class="tag ai">AI</span></div>
+    <div class="item"><div class="dot"></div><span>Generador estructura Pitch Deck</span><span class="tag ai">AI</span></div>
+    <div class="item"><div class="dot"></div><span>Asistente de valuación AI</span><span class="tag ai">AI</span></div>
+    <div class="item"><div class="dot"></div><span>Data room templates automáticos</span><span class="tag make">Make</span></div>
+    <div class="item"><div class="dot"></div><span>Pipeline tracker de fundraising</span><span class="tag dev">Dev</span></div>
+    <div class="item"><div class="dot"></div><span>Bot de preparación de intros</span><span class="tag ai">AI</span></div>
+  </div>
+
+  <!-- 5. Contenido y Marketing -->
+  <div class="area c5">
+    <div class="area-header">
+      <div class="area-icon">📣</div>
+      <div class="area-title">Contenido y Marketing</div>
+    </div>
+    <div class="item"><div class="dot"></div><span>Generador posts LinkedIn con AI</span><span class="tag ai">AI</span></div>
+    <div class="item"><div class="dot"></div><span>Newsletter automática semanal</span><span class="tag make">Make</span></div>
+    <div class="item"><div class="dot"></div><span>Casos de éxito automatizados</span><span class="tag ai">AI</span></div>
+    <div class="item"><div class="dot"></div><span>Bot de contenido SEO</span><span class="tag ai">AI</span></div>
+  </div>
+
+  <!-- 6. Inteligencia del Negocio -->
+  <div class="area c6">
+    <div class="area-header">
+      <div class="area-icon">📊</div>
+      <div class="area-title">Inteligencia del Negocio</div>
+    </div>
+    <div class="item"><div class="dot"></div><span>Dashboard de métricas del negocio</span><span class="tag dev">Dev</span></div>
+    <div class="item"><div class="dot"></div><span>Reporte semanal automático</span><span class="tag make">Make</span></div>
+    <div class="item"><div class="dot"></div><span>Análisis de conversión por módulo</span><span class="tag ai">AI</span></div>
+    <div class="item"><div class="dot"></div><span>Tracker de revenue y pipeline</span><span class="tag make">Make</span></div>
+  </div>
+
+</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="tag make">Make</span> Automatización en Make.com</div>
+  <div class="legend-item"><span class="tag ai">AI</span> Lógica con IA / OpenAI</div>
+  <div class="legend-item"><span class="tag dev">Dev</span> Desarrollo custom</div>
+</div>
+
+<div class="total-bar">
+  <span>29 automatizaciones</span> · 6 áreas · Stack: Make · OpenAI · Notion · Gmail · Slack · Google Sheets
+</div>
+
+</body>
+</html>
