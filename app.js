@@ -41,7 +41,7 @@
 
   // Key URLs for outbound emails
   var DISCOVERY_LINK = 'https://calendar.app.google/QLhJS3bpbAJfreNXA';
-  var WEBSITE_URL = 'https://www.moatlabs-ventures.com';
+  var WEBSITE_URL = 'https://themoatlabs.com';
 
   // Domain safety: max emails per day from this dashboard (warm only, cold is Instantly)
   var DAILY_SEND_LIMIT = 15;
@@ -1178,39 +1178,40 @@
   var activeSegment = null;
 
   // Playbooks: segment-specific email generation instructions
-  var SIGNATURE_BLOCK = ' Sign off as: Cristian Mendivelso | MOAT Labs | ' + WEBSITE_URL;
-  var BOOKING_CTA = ' After your closing line, always add a P.S.: "P.S. If easier, grab 15 minutes here: ' + DISCOVERY_LINK + '"';
+  var SIGNATURE_BLOCK = ' Sign off EXACTLY as: "Cristian Mendivelso | Founder, MOAT Labs | ' + WEBSITE_URL + '". No other signature variations.';
+  var BOOKING_CTA = ' After closing line, add a P.S.: "P.S. Si te sirve, podés hacer el MOAT Score gratis en 5 min aquí: ' + WEBSITE_URL + '/moat-score — te devuelve un análisis personalizado con 3 palancas accionables. O si preferís call directo: ' + DISCOVERY_LINK + '"';
+  var MOAT_SCORE_HOOK = ' IMPORTANT: Whenever possible, reference the free self-assessment at ' + WEBSITE_URL + '/moat-score as a low-commitment first step. It is the softest CTA we have and converts way better than asking for a 30-min call upfront.';
 
   var PLAYBOOKS = {
     vcs_latam: {
       label: 'VC LATAM',
-      angle: 'Portfolio value-add',
-      instructions: 'You are writing to a VC partner in Latin America. Pitch MOAT Labs as a value-add for their portfolio companies: "We diagnose competitive advantages for startups using our MOAT Score framework -- your portfolio companies get a strategic clarity session that identifies their defensibility gaps." Reference their fund thesis if the company name suggests a sector focus. Tone: peer-to-peer, not salesy. Short (4-5 sentences max). End with a soft ask for a 20-min call to explore portfolio fit.' + BOOKING_CTA + SIGNATURE_BLOCK
+      angle: 'Portfolio Round Readiness partner',
+      instructions: 'You are writing to a VC partner in Latin America. MOAT Labs is NOT a consulting firm — we do Round Readiness Sprints (1-8 weeks, $3.5K-$5.5K) that leave founders ready to raise with defended valuation, MOAT thesis, deck, data room, and investor target list. Pitch angle: "Your portfolio founders who are about to raise in the next 6 months could benefit from an independent prep partner — we do not do intros, just the homework that saves them 3 months of back-and-forth with your associates." Tone: peer-to-peer, not salesy. 4-5 sentences. End with a soft ask for a 20-min call to explore if any portfolio founder is a fit.' + BOOKING_CTA + SIGNATURE_BLOCK
     },
     founders_latam: {
       label: 'Founder LATAM',
-      angle: 'Direct MOAT client',
-      instructions: 'You are writing to a startup founder or CEO in Latin America. They are a potential direct client ($5K-$10K engagement). Pitch the MOAT diagnostic as a strategic tool: "We help founders understand their real competitive advantage -- not what they think it is, but what the market data shows." Be direct, founder-to-founder tone. Mention that the diagnostic takes 2 weeks and delivers an actionable MOAT Score report. 4-5 sentences.' + BOOKING_CTA + SIGNATURE_BLOCK
+      angle: 'Round Readiness or MOAT Diagnosis',
+      instructions: 'You are writing to a founder or CEO in Latin America. MOAT Labs has TWO products: (1) Round Readiness Sprint ($3,500-$5,500) for founders raising in next 6 months — we leave them ready to pitch with defended valuation, MOAT thesis, deck, data room, investor target list. No intros, no round management — they close with their own network. (2) MOAT Diagnosis ($10,500) for established companies defending margin against AI. ASK which situation they are in via a soft opener. Track record: Momenta raised $200K, Mozart AI preparing $4M round, 50+ empresas, $15M+ capital acompañado. Offer the free /moat-score self-assessment as the softest first step (5 min, PDF + email analysis). 4-5 sentences max, founder-to-founder tone, no corporate speak.' + MOAT_SCORE_HOOK + BOOKING_CTA + SIGNATURE_BLOCK
     },
     warm_latam: {
       label: 'LATAM Warm Network',
-      angle: 'Relationship nurture',
-      instructions: 'You are writing to a connected operator in Latin America -- someone in our extended network. This is a warm nurture touch, NOT a hard sell. Share something genuinely useful: a market insight, a trend observation, or a question about their business. Mention MOAT Labs naturally ("we have been working on competitive advantage diagnostics for LATAM startups and your space caught our attention"). 3-4 sentences max. End with an open question, not a meeting request. Do NOT include the booking link in the P.S. for warm nurture -- instead just add: "P.S. Would love to hear how things are going on your end."' + SIGNATURE_BLOCK
+      angle: 'Relationship nurture + low-lift invite',
+      instructions: 'You are writing to someone in our extended LATAM network. NOT a hard sell. Share something genuinely useful: an industry observation, a question about their business, or reference their recent work. Briefly mention: "Armamos un self-assessment gratis del MOAT Score en ' + WEBSITE_URL + '/moat-score — 7 preguntas, 5 min, te devolvés un PDF con 3 palancas accionables. Si tiene sentido para tu contexto, pruébalo." No pitch de servicio pagado. 3-4 sentences max. End with an open question, not a meeting request. Do NOT include the booking link P.S. for warm nurture.' + SIGNATURE_BLOCK
     },
     vcs_global: {
       label: 'VC Global',
-      angle: 'LATAM portfolio bridge',
-      instructions: 'You are writing to an international VC (US, Europe, Asia). Pitch MOAT Labs as the LATAM competitive intelligence partner: "If your fund has LATAM exposure or is evaluating it, our MOAT Score framework gives you an independent assessment of startup defensibility in the region." Acknowledge they get many cold emails -- be crisp and differentiated. 3-4 sentences.' + BOOKING_CTA + SIGNATURE_BLOCK
+      angle: 'LATAM Round Readiness bridge',
+      instructions: 'You are writing to an international VC (US, Europe, Asia). Pitch MOAT Labs as the LATAM + US-Hispanic Round Readiness partner: "If your fund evaluates LATAM or US-Hispanic founders raising seed to Series A, our sprints deliver an independent defended valuation + MOAT thesis + deck + data room in 6-8 weeks. We do not intro or run the round — your associates continue driving diligence without conflict of interest." Track record: $15M+ capital acompañado. Acknowledge they get many cold emails. 3-4 sentences.' + BOOKING_CTA + SIGNATURE_BLOCK
     },
     founders_global: {
       label: 'Founder Global',
-      angle: 'LATAM expansion lens',
-      instructions: 'You are writing to a founder outside Latin America. They are a potential client but lower priority. Angle: if they are expanding to LATAM or competing with LATAM players, MOAT diagnostic provides strategic clarity. If no LATAM connection is obvious, pitch the framework itself as applicable globally. Brief, professional, no fluff. 3-4 sentences.' + BOOKING_CTA + SIGNATURE_BLOCK
+      angle: 'Round Readiness for US-Hispanic or LATAM-exposed',
+      instructions: 'You are writing to a founder outside LATAM. If the company name or contact name suggests LATAM heritage (Spanish/Portuguese surname, Miami/Austin/LA base), pitch Round Readiness Sprint — same ($3.5K-$5.5K / US-Hispanic) as LATAM but delivered in English or Spanish. If no LATAM connection apparent, pitch MOAT Diagnosis ($10.5K) for defending margin against AI commoditization. Offer free /moat-score self-assessment first. Brief, professional, no fluff. 3-4 sentences.' + MOAT_SCORE_HOOK + BOOKING_CTA + SIGNATURE_BLOCK
     },
     default: {
       label: 'General',
-      angle: 'MOAT diagnostic pitch',
-      instructions: 'You are writing a professional cold outreach email for MOAT Labs, a strategic consulting firm. Pitch our MOAT Score diagnostic that evaluates competitive advantages for businesses. Be concise (4-5 sentences), professional but warm, and end with a soft ask for a brief call. Personalize based on the company and contact role.' + BOOKING_CTA + SIGNATURE_BLOCK
+      angle: 'Round Readiness + MOAT Score soft entry',
+      instructions: 'You are writing a cold email for MOAT Labs. Two product tracks: (1) Round Readiness Sprint ($3,500-$5,500) — prep for founders raising in next 6 months (MOAT thesis + valuation + deck + data room + investor list, but NO intros, NO closing). (2) MOAT Diagnosis ($10,500) — defensibility roadmap for established companies facing AI disruption. Offer the free MOAT Score self-assessment at ' + WEBSITE_URL + '/moat-score as low-commitment first step. Be concise (4-5 sentences), peer-to-peer tone, end with soft ask.' + BOOKING_CTA + SIGNATURE_BLOCK
     }
   };
 
