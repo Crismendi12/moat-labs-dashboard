@@ -23,6 +23,48 @@
     LEAD: 'Lead', MEETING: '1st Meeting', CLOSING: 'Closing',
     WIN: 'Win', LOST: 'Lost', GAINBACK: 'Gain back', NOWAY: 'NO WAY JOSE'
   };
+
+  // === v2 ROUTING ==============================================
+  function currentView() {
+    var p = new URLSearchParams(window.location.search);
+    var v = p.get('view') || 'feed';
+    return (['feed', 'finanzas', 'panel', 'settings'].indexOf(v) !== -1) ? v : 'feed';
+  }
+
+  function applyView(view) {
+    var feed = document.getElementById('feedMain');
+    var finanzas = document.getElementById('subviewFinanzas');
+    var panel = document.getElementById('subviewPanel');
+    var revStrip = document.getElementById('revenueStrip');
+    if (feed) feed.hidden = (view !== 'feed');
+    if (revStrip) revStrip.hidden = (view !== 'feed');
+    if (finanzas) finanzas.hidden = (view !== 'finanzas');
+    if (panel) panel.hidden = (view !== 'panel');
+    document.querySelectorAll('.topbar-v2__icon').forEach(function (btn) {
+      var active = btn.getAttribute('data-view') === view;
+      btn.classList.toggle('topbar-v2__icon--active', active);
+    });
+    if (typeof lastRenderArgs !== 'undefined' && lastRenderArgs) {
+      renderTab('feed', lastRenderArgs);
+    }
+  }
+
+  function routeTo(view) {
+    var url = view === 'feed' ? window.location.pathname : (window.location.pathname + '?view=' + view);
+    history.pushState({ view: view }, '', url);
+    applyView(view);
+  }
+
+  function wireRouting() {
+    document.querySelectorAll('.topbar-v2__icon').forEach(function (btn) {
+      btn.addEventListener('click', function () { routeTo(btn.getAttribute('data-view')); });
+    });
+    window.addEventListener('popstate', function () { applyView(currentView()); });
+    wireFeedSectionToggles();
+    wireDrawer();
+    applyView(currentView());
+  }
+  // === END v2 ROUTING ==========================================
   var ACTIVE_STAGES = [STAGES.LEAD, STAGES.MEETING, STAGES.CLOSING, STAGES.WIN, STAGES.GAINBACK];
   var PIPELINE_ACTIVE = [STAGES.LEAD, STAGES.MEETING, STAGES.CLOSING, STAGES.GAINBACK];
 
@@ -486,6 +528,7 @@
 
   // Init
   function init() {
+    wireRouting();
     addSkeletons();
     initTabs();
     initHelp();
@@ -693,23 +736,24 @@
   var lastRenderArgs = null;
   var dirtyTabs = { ventas: true, finanzas: true, contenido: true, operaciones: true };
 
-  /** Dispatch rendering for a specific tab using cached data. @param {string} tab @param {Array} args */
+  /** v2: dispatch rendering based on current URL view, not legacy tab name. @param {string} tab @param {Array} args */
   function renderTab(tab, args) {
     var p = args[0], co = args[1], m = args[2], ct = args[3], g = args[4], ob = args[5], pr = args[6], li = args[7], an = args[8];
-    if (tab === 'ventas') {
-      renderKPIs(p, m, ct); renderFunnel(p); renderIntel(p);
-      renderOutbound(ob || []); renderProspecting(pr || []);
-      renderFollowups(p); renderSegments();
-    } else if (tab === 'finanzas') {
-      renderContabilidad(ct || [], g || []); renderCascada(ct || [], g || []);
+    var view = (typeof currentView === 'function') ? currentView() : 'feed';
+    if (view === 'finanzas') {
+      renderContabilidad(ct || [], g || []);
+      renderCascada(ct || [], g || []);
       renderForecast(p, m);
-    } else if (tab === 'contenido') {
-      renderWebAnalytics(an || []); renderContent(co); renderLinkedInPerformance(co, m, li || []);
-      renderSSI(); renderAudience();
-    } else if (tab === 'operaciones') {
+    } else if (view === 'panel') {
+      renderWebAnalytics(an || []);
+      renderContent(co);
+      renderLinkedInPerformance(co, m, li || []);
+      renderSSI();
+      renderAudience();
       renderSalesVelocity(p, g || [], co);
       renderChart(m);
     }
+    // 'feed' view renders via renderFeed() called from render(); nothing else to do here.
     dirtyTabs[tab] = false;
     animateBars();
     updateQuickBar(args);
@@ -774,10 +818,14 @@
   function render(pipeline, contenido, metricas, contabilidad, gastos, outbound, prospecting, linkedin, analytics) {
     lastRenderArgs = [pipeline, contenido, metricas, contabilidad, gastos, outbound, prospecting, linkedin, analytics || []];
     dirtyTabs = { ventas: true, finanzas: true, contenido: true, operaciones: true };
+    // v2: always render feed + revenue strip (cheap, DOM-safe with null guards)
+    renderFeed(pipeline, outbound);
+    renderRevenueStrip(contabilidad);
     renderTab(currentTab, lastRenderArgs);
     removeSkeletons();
+    var lu = document.getElementById('lastUpdate');
     var timeStr = new Date().toLocaleTimeString();
-    document.getElementById('lastUpdate').textContent = 'Updated ' + timeStr;
+    if (lu) lu.textContent = 'Updated ' + timeStr;
     var liveRegion = document.getElementById('liveRegion');
     if (liveRegion) liveRegion.textContent = 'Dashboard data refreshed at ' + timeStr;
   }
@@ -3351,6 +3399,254 @@
       { Company: 'mLabs', Contact: 'Carlos Saiani', Email: 'carlos.saiani@mlabs.com.br', Industry: 'Marketing SaaS', Score: '78', LinkedIn: 'linkedin.com/in/saiani', Country: 'Brazil', Source: 'Vibe Prospecting', Subject: 'Marketing SaaS tools without AI will lose to those that have it', Message: 'Carlos,\n\nThe marketing SaaS landscape is being reshaped: tools that generate content, predict performance, and optimize in real-time are pulling ahead. Those that remain scheduling-and-analytics platforms will get commoditized.\n\nWe help SaaS companies design the AI features that create competitive moats -- and the go-to-market strategy to position them.\n\n20 minutes for a strategic conversation?\n\nCristian Mendivelso\nMOAT Labs', Status: 'nuevo' },
     ];
   }
+
+  // === v2 FEED =================================================
+  function daysSinceDate(s) {
+    if (!s) return Infinity;
+    var d = new Date(s);
+    if (isNaN(d.getTime())) return Infinity;
+    return Math.floor((Date.now() - d.getTime()) / 86400000);
+  }
+
+  function buildFeedItems(pipeline, outbound) {
+    var urgente = [], week = [], active = [];
+
+    (outbound || []).forEach(function (r, idx) {
+      var id = 'ob-' + idx;
+      var status = (field(r, 'Status') || 'nuevo').toLowerCase();
+      var company = field(r, 'Company') || '';
+      var contact = field(r, 'Contact') || '';
+      var industry = field(r, 'Industry') || '';
+      var country = field(r, 'Country') || '';
+      var seqStep = parseInt(field(r, 'SeqStep')) || 0;
+      var lastSent = field(r, 'LastSent') || '';
+      var days = daysSinceDate(lastSent);
+
+      var title = contact ? (contact + (company ? ' \u00B7 ' + company : '')) : (company || 'Unknown');
+      var meta = [industry, country].filter(Boolean).join(' \u00B7 ');
+
+      if (status === 'respondio') {
+        urgente.push({ id: id, kind: 'outbound', section: 'urgente', title: title, meta: 'Respondi\u00F3 \u00B7 revisar', actionLabel: 'Reply', actionKind: 'reply', source: r });
+        return;
+      }
+      if (status === 'reunion' || status === 'convertido' || status === 'perdido') {
+        if (status !== 'perdido') active.push({ id: id, kind: 'outbound', section: 'active', title: title, meta: meta + ' \u00B7 ' + status, actionLabel: 'Open', actionKind: 'open', source: r });
+        return;
+      }
+
+      // Auto sequence timing: Touch 2 at 3d, Touch 3 at 5d (matches Make scenario 4498104)
+      if (seqStep === 1 && days >= 3) {
+        urgente.push({ id: id, kind: 'outbound', section: 'urgente', title: title, meta: 'Touch 2 listo \u00B7 ' + meta, actionLabel: 'Generate', actionKind: 'generate', source: r });
+      } else if (seqStep === 2 && days >= 5) {
+        urgente.push({ id: id, kind: 'outbound', section: 'urgente', title: title, meta: 'Touch 3 listo \u00B7 ' + meta, actionLabel: 'Generate', actionKind: 'generate', source: r });
+      } else if (seqStep === 1 && days >= 1 && days < 3) {
+        week.push({ id: id, kind: 'outbound', section: 'week', title: title, meta: 'Touch 2 en ' + (3 - days) + 'd', actionLabel: 'Open', actionKind: 'open', source: r });
+      } else if (seqStep === 2 && days >= 3 && days < 5) {
+        week.push({ id: id, kind: 'outbound', section: 'week', title: title, meta: 'Touch 3 en ' + (5 - days) + 'd', actionLabel: 'Open', actionKind: 'open', source: r });
+      } else {
+        active.push({ id: id, kind: 'outbound', section: 'active', title: title, meta: meta + (seqStep ? ' \u00B7 step ' + seqStep : ''), actionLabel: 'Open', actionKind: 'open', source: r });
+      }
+    });
+
+    (pipeline || []).forEach(function (r, idx) {
+      var id = 'pl-' + idx;
+      var stage = field(r, 'Etapa') || '';
+      if (stage === STAGES.LOST || stage === STAGES.NOWAY || stage === STAGES.WIN) return;
+
+      var company = field(r, 'Empresa') || field(r, 'Company') || '';
+      var contact = fullName(r);
+      var val = parseFloat(String(field(r, 'Valor Deal') || '0').replace(/[$,]/g, '')) || 0;
+      var valStr = val ? '$' + (val >= 1000 ? Math.round(val / 1000) + 'K' : val) : '';
+      var title = (contact !== 'Unknown' ? contact : company) + (company && contact !== 'Unknown' ? ' \u00B7 ' + company : '');
+      var meta = [stage, valStr].filter(Boolean).join(' \u00B7 ');
+
+      // TODO(v3): add a NextStep/StageDate column in Pipeline sheet; use it to refine this rule.
+      // v2 fallback: all Meeting-stage deals land in Urgente (user triages manually).
+      if (stage === STAGES.MEETING) {
+        urgente.push({ id: id, kind: 'pipeline', section: 'urgente', title: title, meta: meta + ' \u00B7 seguir paso', actionLabel: 'Advance', actionKind: 'advance', source: r });
+      } else if (stage === STAGES.CLOSING) {
+        week.push({ id: id, kind: 'pipeline', section: 'week', title: title, meta: meta + ' \u00B7 cerrando', actionLabel: 'Advance', actionKind: 'advance', source: r });
+      } else {
+        active.push({ id: id, kind: 'pipeline', section: 'active', title: title, meta: meta, actionLabel: 'Open', actionKind: 'open', source: r });
+      }
+    });
+
+    return { urgente: urgente, week: week, active: active };
+  }
+
+  var _currentFeed = { urgente: [], week: [], active: [] };
+
+  function renderFeedList(items, containerId, sectionClass) {
+    var list = document.getElementById(containerId);
+    if (!list) return;
+    clear(list);
+    if (items.length === 0) {
+      list.appendChild(el('div', { className: 'feed-empty', textContent: 'Nada pendiente \uD83C\uDFAF' }));
+      return;
+    }
+    items.forEach(function (it) {
+      var item = el('div', {
+        className: 'feed-item feed-item--' + sectionClass,
+        'data-feed-id': it.id,
+        onClick: function () { openDrawer(it.id); }
+      }, [
+        el('span', { className: 'feed-item__dot' }),
+        el('div', { className: 'feed-item__main' }, [
+          el('div', { className: 'feed-item__title', textContent: it.title }),
+          el('div', { className: 'feed-item__meta', textContent: it.meta })
+        ]),
+        el('button', {
+          className: 'feed-item__action',
+          'data-action': it.actionKind,
+          textContent: it.actionLabel,
+          onClick: function (ev) {
+            ev.stopPropagation();
+            openDrawer(it.id);
+          }
+        })
+      ]);
+      list.appendChild(item);
+    });
+  }
+
+  function renderFeed(pipeline, outbound) {
+    _currentFeed = buildFeedItems(pipeline, outbound);
+    renderFeedList(_currentFeed.urgente, 'feedListUrgente', 'urgente');
+    renderFeedList(_currentFeed.week, 'feedListWeek', 'week');
+    renderFeedList(_currentFeed.active, 'feedListActive', 'active');
+    var cu = document.getElementById('feedCountUrgente'); if (cu) cu.textContent = _currentFeed.urgente.length;
+    var cw = document.getElementById('feedCountWeek'); if (cw) cw.textContent = _currentFeed.week.length;
+    var ca = document.getElementById('feedCountActive'); if (ca) ca.textContent = _currentFeed.active.length;
+  }
+
+  function wireFeedSectionToggles() {
+    document.querySelectorAll('.feed-section__header').forEach(function (h) {
+      h.addEventListener('click', function () {
+        h.parentElement.classList.toggle('feed-section--collapsed');
+      });
+    });
+  }
+
+  function renderRevenueStrip(contabilidad) {
+    var revenue = 0;
+    (contabilidad || []).forEach(function (r) {
+      revenue += parseFloat(String(field(r, 'Dinero')).replace(/[$,]/g, '')) || 0;
+    });
+    var pct = Math.min(Math.round((revenue / 100000) * 100), 100);
+    var valEl = document.getElementById('revenueStripVal');
+    var fillEl = document.getElementById('revenueStripFill');
+    var pctEl = document.getElementById('revenueStripPct');
+    if (valEl) valEl.textContent = '$' + revenue.toLocaleString('en-US');
+    if (fillEl) fillEl.style.width = pct + '%';
+    if (pctEl) pctEl.textContent = pct + '% of $100K';
+  }
+  // === END v2 FEED =============================================
+
+  // === v2 DRAWER ==============================================
+  var _drawerItem = null;
+
+  function findFeedItem(id) {
+    var pools = [_currentFeed.urgente, _currentFeed.week, _currentFeed.active];
+    for (var i = 0; i < pools.length; i++) {
+      for (var j = 0; j < pools[i].length; j++) {
+        if (pools[i][j].id === id) return pools[i][j];
+      }
+    }
+    return null;
+  }
+
+  function renderDrawerBody(item) {
+    var body = document.getElementById('drawerBody');
+    if (!body) return;
+    clear(body);
+    var r = item.source || {};
+
+    function row(label, value) {
+      if (!value) return null;
+      return el('div', { className: 'drawer__row' }, [
+        el('span', { className: 'drawer__row-label', textContent: label }),
+        el('span', { className: 'drawer__row-value', textContent: String(value) })
+      ]);
+    }
+
+    if (item.kind === 'outbound') {
+      var status = field(r, 'Status') || 'nuevo';
+      var seqStep = parseInt(field(r, 'SeqStep')) || 0;
+      var lastSent = field(r, 'LastSent') || '';
+      var score = field(r, 'Score') || '';
+      var subj = field(r, 'Subject') || '';
+      var msg = field(r, 'Message') || '';
+      [
+        row('Status', status),
+        row('Industry', field(r, 'Industry')),
+        row('Country', field(r, 'Country')),
+        row('Score', score),
+        row('Sequence step', seqStep ? 'Touch ' + seqStep : '\u2014'),
+        row('Last sent', lastSent || '\u2014')
+      ].filter(Boolean).forEach(function (n) { body.appendChild(n); });
+
+      if (subj || msg) {
+        body.appendChild(el('div', { className: 'drawer__section-title', textContent: 'Ultimo mensaje' }));
+        if (subj) body.appendChild(el('div', { className: 'drawer__message', textContent: 'Asunto: ' + subj + '\n\n' + msg }));
+        else body.appendChild(el('div', { className: 'drawer__message', textContent: msg }));
+      }
+    } else if (item.kind === 'pipeline') {
+      [
+        row('Etapa', field(r, 'Etapa')),
+        row('Valor Deal', field(r, 'Valor Deal')),
+        row('Empresa', field(r, 'Empresa') || field(r, 'Company')),
+        row('Email', field(r, 'Email')),
+        row('Notas', field(r, 'Notas') || field(r, 'Notes'))
+      ].filter(Boolean).forEach(function (n) { body.appendChild(n); });
+    }
+
+    body.appendChild(el('div', { className: 'drawer__section-title', textContent: 'Acciones' }));
+    var actions = el('div', { className: 'drawer__actions' });
+    actions.appendChild(el('button', {
+      className: 'drawer__action drawer__action--secondary',
+      textContent: 'Open row in sheet',
+      onClick: function () { window.open('https://docs.google.com/spreadsheets/d/1VcCoM6Un9G5XLddgvPCqc5dj4UCDpI_y76PIUM8fGIo', '_blank'); }
+    }));
+    body.appendChild(actions);
+  }
+
+  function openDrawer(id) {
+    var item = findFeedItem(id);
+    if (!item) return;
+    _drawerItem = item;
+    var titleEl = document.getElementById('drawerTitle');
+    if (titleEl) titleEl.textContent = item.title;
+    renderDrawerBody(item);
+    var drawer = document.getElementById('drawer');
+    if (drawer) drawer.classList.add('drawer--open');
+    var overlay = document.getElementById('drawerOverlay');
+    if (overlay) {
+      overlay.hidden = false;
+      requestAnimationFrame(function () { overlay.classList.add('drawer-overlay--open'); });
+    }
+  }
+
+  function closeDrawer() {
+    var drawer = document.getElementById('drawer');
+    if (drawer) drawer.classList.remove('drawer--open');
+    var overlay = document.getElementById('drawerOverlay');
+    if (overlay) {
+      overlay.classList.remove('drawer-overlay--open');
+      setTimeout(function () { overlay.hidden = true; }, 200);
+    }
+    _drawerItem = null;
+  }
+
+  function wireDrawer() {
+    var close = document.getElementById('drawerClose');
+    if (close) close.addEventListener('click', closeDrawer);
+    var overlay = document.getElementById('drawerOverlay');
+    if (overlay) overlay.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && _drawerItem) closeDrawer();
+    });
+  }
+  // === END v2 DRAWER ==========================================
 
   document.addEventListener('DOMContentLoaded', init);
 })();
