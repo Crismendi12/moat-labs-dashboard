@@ -55,170 +55,62 @@
     </div>
   </div>
 
-  <nav class="app-tabs" id="appTabs">
-    <button class="app-tab app-tab--active" data-tab="ventas">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Ventas
-    </button>
-    <button class="app-tab" data-tab="finanzas">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-      Finanzas
-    </button>
-    <button class="app-tab" data-tab="contenido">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      Contenido
-    </button>
-    <button class="app-tab" data-tab="operaciones">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      Operaciones
-    </button>
+  <!-- === v2 TOPBAR NAV ============================================= -->
+  <nav class="topbar-v2" id="topbarV2">
+    <div class="topbar-v2__nav">
+      <button class="topbar-v2__icon topbar-v2__icon--active" data-view="feed" aria-label="Feed" title="Hoy">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h12"/></svg>
+      </button>
+      <button class="topbar-v2__icon" data-view="finanzas" aria-label="Finanzas" title="Finanzas">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </button>
+      <button class="topbar-v2__icon" data-view="panel" aria-label="Panel" title="Analytics + contenido + ops">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </button>
+    </div>
   </nav>
 
-  <main class="dashboard">
-    <!-- === VENTAS TAB === -->
-    <!-- KPI Cards -->
-    <section class="kpi-grid" data-tab="ventas">
-      <div class="kpi-card">
-        <div class="kpi-icon kpi-icon--leads">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <div class="kpi-content">
-          <span class="kpi-value" id="kpiLeads">--</span>
-          <span class="kpi-label">Total Leads</span>
-        </div>
+  <div class="revenue-strip" id="revenueStrip">
+    <span class="revenue-strip__label">Revenue YTD</span>
+    <span class="revenue-strip__value" id="revenueStripVal">$0</span>
+    <div class="revenue-strip__bar"><div class="revenue-strip__fill" id="revenueStripFill" style="width:0%"></div></div>
+    <span class="revenue-strip__pct" id="revenueStripPct">0% of $100K</span>
+  </div>
+
+  <!-- === v2 FEED ================================================== -->
+  <main class="feed-main" id="feedMain">
+    <section class="feed-section feed-section--urgente" id="feedSectionUrgente">
+      <div class="feed-section__header" data-section="urgente">
+        <span class="feed-section__dot"></span>
+        <span>Urgente — hoy</span>
+        <span class="feed-section__count" id="feedCountUrgente">0</span>
+        <span class="feed-section__chev">&#9662;</span>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-icon kpi-icon--calls">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        </div>
-        <div class="kpi-content">
-          <span class="kpi-value" id="kpiCalls">--</span>
-          <span class="kpi-label">Calls This Week</span>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon kpi-icon--proposals">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        </div>
-        <div class="kpi-content">
-          <span class="kpi-value" id="kpiProposals">--</span>
-          <span class="kpi-label">Closing Deals</span>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon kpi-icon--pipeline">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        </div>
-        <div class="kpi-content">
-          <span class="kpi-value" id="kpiPipeline">--</span>
-          <span class="kpi-label">Pipeline Value</span>
-        </div>
-      </div>
-      <div class="kpi-card kpi-card--target">
-        <div class="kpi-icon kpi-icon--target">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
-        </div>
-        <div class="kpi-content">
-          <span class="kpi-value" id="kpiRevenue">--</span>
-          <span class="kpi-label">Revenue vs $100K Target</span>
-          <div class="kpi-progress">
-            <div class="kpi-progress-bar" id="kpiRevenueBar"></div>
-          </div>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon kpi-icon--velocity">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <div class="kpi-content">
-          <span class="kpi-value" id="kpiWinRate">--</span>
-          <span class="kpi-label">Win Rate</span>
-        </div>
-      </div>
+      <div class="feed-list" id="feedListUrgente"></div>
     </section>
-
-    <!-- Pipeline Funnel -->
-    <section class="card" data-tab="ventas">
-      <div class="card-header">
-        <h2>Pipeline Funnel</h2>
-        <span class="card-badge" id="pipelineTotal">0 deals</span>
+    <section class="feed-section feed-section--week" id="feedSectionWeek">
+      <div class="feed-section__header" data-section="week">
+        <span class="feed-section__dot"></span>
+        <span>Esta semana</span>
+        <span class="feed-section__count" id="feedCountWeek">0</span>
+        <span class="feed-section__chev">&#9662;</span>
       </div>
-      <div class="funnel" id="funnel"></div>
-      <div class="funnel-legend" id="funnelLegend"></div>
+      <div class="feed-list" id="feedListWeek"></div>
     </section>
-
-    <!-- Intel Briefs -->
-    <section class="card intel-section" data-tab="ventas">
-      <div class="card-header">
-        <h2>Intel Briefs</h2>
-        <span class="card-badge" id="intelCount">0 deals</span>
+    <section class="feed-section feed-section--active feed-section--collapsed" id="feedSectionActive">
+      <div class="feed-section__header" data-section="active">
+        <span class="feed-section__dot"></span>
+        <span>Activos</span>
+        <span class="feed-section__count" id="feedCountActive">0</span>
+        <span class="feed-section__chev">&#9662;</span>
       </div>
-      <div class="intel-deals" id="intelDeals">
-        <div class="empty-state">Loading pipeline...</div>
-      </div>
+      <div class="feed-list" id="feedListActive"></div>
     </section>
+  </main>
 
-    <!-- Intel Modal -->
-    <div class="intel-modal-overlay" id="intelOverlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="intelModalTitle">
-      <div class="intel-modal">
-        <div class="intel-modal-header">
-          <h3 id="intelModalTitle">Intel Brief</h3>
-          <button class="intel-modal-close" id="intelClose" aria-label="Close">&times;</button>
-        </div>
-        <div class="intel-modal-body" id="intelModalBody">
-          <div class="intel-loading">Generating brief...</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Outbound Queue -->
-    <section class="card outbound-section" data-tab="ventas">
-      <div class="card-header">
-        <h2>Outbound Queue</h2>
-        <div class="ob-header-right">
-          <span class="ob-legend"><span class="ob-score ob-score--hot">85+</span> Hot <span class="ob-score ob-score--warm">70+</span> Warm <span class="ob-score ob-score--cold">&lt;70</span> Cold</span>
-          <span class="card-badge" id="outboundCount">0</span>
-        </div>
-      </div>
-      <div class="ob-funnel" id="obFunnel"></div>
-      <div class="ob-metrics" id="obMetrics"></div>
-      <div class="ob-filters" id="obFilters" role="tablist" aria-label="Outbound stage filters">
-        <button class="ob-filter ob-filter--active" data-stage="all" role="tab" aria-selected="true" tabindex="0">All</button>
-        <button class="ob-filter" data-stage="nuevo" role="tab" aria-selected="false" tabindex="-1">Nuevo</button>
-        <button class="ob-filter" data-stage="contactado" role="tab" aria-selected="false" tabindex="-1">Contactado</button>
-        <button class="ob-filter" data-stage="respondio" role="tab" aria-selected="false" tabindex="-1">Respondio</button>
-        <button class="ob-filter" data-stage="reunion" role="tab" aria-selected="false" tabindex="-1">Reunion</button>
-        <button class="ob-filter" data-stage="convertido" role="tab" aria-selected="false" tabindex="-1">Convertido</button>
-      </div>
-      <div class="outbound-list" id="outboundList">
-        <div class="empty-state">Loading outbound prospects...</div>
-      </div>
-    </section>
-
-    <!-- Prospecting -->
-    <section class="card prospecting-section" data-tab="ventas">
-      <div class="card-header">
-        <h2>Prospecting</h2>
-        <span class="card-badge" id="prospectingCount">0 leads</span>
-      </div>
-      <div class="prospecting-list" id="prospectingList">
-        <div class="empty-state">Loading prospecting data...</div>
-      </div>
-    </section>
-
-    <!-- Contact Segments -->
-    <section class="card segments-section" data-tab="ventas">
-      <div class="card-header">
-        <h2>Contact Segments</h2>
-        <span class="card-badge" id="segmentsTotal">0 contacts</span>
-      </div>
-      <div class="seg-summary" id="segSummary"></div>
-      <div class="seg-detail" id="segDetail"></div>
-    </section>
-
-    <!-- === FINANZAS TAB === -->
-    <!-- Contabilidad Section -->
-    <section class="card contab-section" data-tab="finanzas">
+  <!-- === v2 SUBVIEW: FINANZAS ====================================== -->
+  <div class="subview" data-view="finanzas" id="subviewFinanzas" hidden>
+    <section class="card contab-section">
       <div class="card-header">
         <h2>Contabilidad</h2>
       </div>
@@ -256,8 +148,7 @@
       </div>
     </section>
 
-    <!-- Cascada Financiera -->
-    <section class="card cascada-section" data-tab="finanzas">
+    <section class="card cascada-section">
       <div class="card-header">
         <h2>Cascada Financiera</h2>
         <span class="card-badge" id="cascadaCurrency">USD / COP</span>
@@ -280,9 +171,20 @@
       <div class="cascada-pending" id="cascadaPending"></div>
     </section>
 
-    <!-- === CONTENIDO TAB === -->
-    <!-- Web Analytics -->
-    <section class="card wa-section" data-tab="contenido">
+    <section class="card forecast-section">
+      <div class="card-header">
+        <h2>Revenue Forecast</h2>
+        <span class="card-badge" id="forecastPeriod">3-Month Outlook</span>
+      </div>
+      <div class="forecast-summary" id="forecastSummary"></div>
+      <div class="forecast-bars" id="forecastBars"></div>
+      <div class="forecast-details" id="forecastDetails"></div>
+    </section>
+  </div>
+
+  <!-- === v2 SUBVIEW: PANEL (contenido + ops) ======================= -->
+  <div class="subview" data-view="panel" id="subviewPanel" hidden>
+    <section class="card wa-section">
       <div class="card-header">
         <h2>Web Analytics</h2>
         <span class="card-badge" id="waPeriod">Last 7 days</span>
@@ -300,8 +202,7 @@
       </div>
     </section>
 
-    <!-- Content Calendar -->
-    <section class="card" data-tab="contenido">
+    <section class="card">
       <div class="card-header">
         <h2>Content Calendar</h2>
       </div>
@@ -310,8 +211,7 @@
       </div>
     </section>
 
-    <!-- LinkedIn + Content Performance -->
-    <section class="card" data-tab="contenido">
+    <section class="card">
       <div class="card-header">
         <h2>LinkedIn Performance</h2>
         <span class="card-badge" id="liPeriod">This Week</span>
@@ -341,8 +241,7 @@
       <div class="li-top-posts" id="liTopPosts"></div>
     </section>
 
-    <!-- SSI Score -->
-    <section class="card" data-tab="contenido">
+    <section class="card">
       <div class="card-header">
         <h2>Social Selling Index (SSI)</h2>
         <span class="card-badge">Top 4% in industry</span>
@@ -350,8 +249,7 @@
       <div class="ssi-layout" id="ssiLayout"></div>
     </section>
 
-    <!-- Audience Insights -->
-    <section class="card" data-tab="contenido">
+    <section class="card">
       <div class="card-header">
         <h2>Audience Insights</h2>
         <span class="card-badge" id="audienceBadge">9,563 followers</span>
@@ -359,7 +257,7 @@
       <div class="audience-summary" id="audienceSummary">
         <div class="audience-stat">
           <span class="audience-stat-value">27%</span>
-          <span class="audience-stat-label">Founders & C-Suite</span>
+          <span class="audience-stat-label">Founders &amp; C-Suite</span>
         </div>
         <div class="audience-stat">
           <span class="audience-stat-value">49%</span>
@@ -367,7 +265,7 @@
         </div>
         <div class="audience-stat">
           <span class="audience-stat-value">44%</span>
-          <span class="audience-stat-label">Tech, Consulting & Finance</span>
+          <span class="audience-stat-label">Tech, Consulting &amp; Finance</span>
         </div>
         <div class="audience-stat">
           <span class="audience-stat-value">62.6%</span>
@@ -377,20 +275,7 @@
       <div class="audience-grid" id="audienceGrid"></div>
     </section>
 
-    <!-- === OPERACIONES TAB === -->
-    <!-- Follow-ups Pendientes (logically belongs with Ventas) -->
-    <section class="card" data-tab="ventas">
-      <div class="card-header">
-        <h2>Follow-ups Pendientes</h2>
-        <span class="card-badge card-badge--warning" id="followupCount">0</span>
-      </div>
-      <div class="followups-list" id="followupsList">
-        <div class="empty-state">No follow-ups pending</div>
-      </div>
-    </section>
-
-    <!-- Sales Velocity -->
-    <section class="card" data-tab="operaciones">
+    <section class="card">
       <div class="card-header">
         <h2>Sales Velocity</h2>
       </div>
@@ -401,19 +286,19 @@
             <span class="vel-stage-label">Lead</span>
             <span class="vel-stage-count" id="velLead">0</span>
           </div>
-          <div class="vel-arrow">></div>
+          <div class="vel-arrow">&gt;</div>
           <div class="vel-stage">
             <div class="vel-stage-bar vel-bar--meeting" id="velBarMeeting"></div>
             <span class="vel-stage-label">Meeting</span>
             <span class="vel-stage-count" id="velMeeting">0</span>
           </div>
-          <div class="vel-arrow">></div>
+          <div class="vel-arrow">&gt;</div>
           <div class="vel-stage">
             <div class="vel-stage-bar vel-bar--closing" id="velBarClosing"></div>
             <span class="vel-stage-label">Proposal</span>
             <span class="vel-stage-count" id="velClosing">0</span>
           </div>
-          <div class="vel-arrow">></div>
+          <div class="vel-arrow">&gt;</div>
           <div class="vel-stage">
             <div class="vel-stage-bar vel-bar--win" id="velBarWin"></div>
             <span class="vel-stage-label">Won</span>
@@ -441,8 +326,7 @@
       </div>
     </section>
 
-    <!-- Weekly Metrics Chart -->
-    <section class="card" data-tab="operaciones">
+    <section class="card">
       <div class="card-header">
         <h2>Weekly Metrics</h2>
       </div>
@@ -453,8 +337,7 @@
       </div>
     </section>
 
-    <!-- Quick Actions -->
-    <section class="card" data-tab="operaciones">
+    <section class="card">
       <div class="card-header">
         <h2>Quick Actions</h2>
       </div>
@@ -464,7 +347,7 @@
           <span>Google Sheet</span>
         </a>
         <a href="https://us2.make.com/organization/3055410/team/512246/scenarios" target="_blank" class="qa-link">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06A1.65 1.65 0 0 0 15 19.4a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
           <span>Make.com Scenarios</span>
         </a>
         <a href="https://vercel.com/cristianmendivelso-6926s-projects/moat-labs-dashboard" target="_blank" class="qa-link">
@@ -477,18 +360,30 @@
         </a>
       </div>
     </section>
+  </div>
 
-    <!-- Revenue Forecast -->
-    <section class="card forecast-section" data-tab="finanzas">
-      <div class="card-header">
-        <h2>Revenue Forecast</h2>
-        <span class="card-badge" id="forecastPeriod">3-Month Outlook</span>
+  <!-- Intel Modal (modal peer, stays outside subviews) -->
+  <div class="intel-modal-overlay" id="intelOverlay" style="display:none;" role="dialog" aria-modal="true" aria-labelledby="intelModalTitle">
+    <div class="intel-modal">
+      <div class="intel-modal-header">
+        <h3 id="intelModalTitle">Intel Brief</h3>
+        <button class="intel-modal-close" id="intelClose" aria-label="Close">&times;</button>
       </div>
-      <div class="forecast-summary" id="forecastSummary"></div>
-      <div class="forecast-bars" id="forecastBars"></div>
-      <div class="forecast-details" id="forecastDetails"></div>
-    </section>
-  </main>
+      <div class="intel-modal-body" id="intelModalBody">
+        <div class="intel-loading">Generating brief...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- === v2 DRAWER =============================================== -->
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer__header">
+      <span class="drawer__title" id="drawerTitle">—</span>
+      <button class="drawer__close" id="drawerClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="drawer__body" id="drawerBody"></div>
+  </aside>
 
   <footer class="footer">
     <div class="footer-left">
