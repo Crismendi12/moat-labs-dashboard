@@ -360,7 +360,7 @@ def build_pdf():
     ))
     for item in [
         "Instrucciones de tono y angulo especificas para el segmento",
-        "P.S. con link de discovery call: calendar.app.google/QLhJS3bpbAJfreNXA (excepto warm_latam)",
+        "P.S. con link de discovery call: calendar.app.google/UgjwZH3X5U8gB3AT9 (excepto warm_latam)",
         "Firma profesional: Cristian Mendivelso | MOAT Labs | moatlabs-ventures.com",
         "Referencia a contenido reciente de LinkedIn como social proof (si aplica)",
     ]:

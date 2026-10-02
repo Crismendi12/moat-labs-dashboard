@@ -82,7 +82,7 @@
   var LEAD_TO_PIPELINE_URL = 'https://hook.us2.make.com/nzihpm5wjqulmh4kpk4u6g71s5fmqiuj';
 
   // Key URLs for outbound emails
-  var DISCOVERY_LINK = 'https://calendar.app.google/QLhJS3bpbAJfreNXA';
+  var DISCOVERY_LINK = 'https://calendar.app.google/UgjwZH3X5U8gB3AT9';
   var WEBSITE_URL = 'https://themoatlabs.com';
 
   // Domain safety: max emails per day from this dashboard (warm only, cold is Instantly)

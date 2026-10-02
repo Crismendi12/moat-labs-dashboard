@@ -5,7 +5,7 @@ Dashboard deployed to https://moat-labs-dashboard.vercel.app
 ## Key URLs
 - **Dashboard**: https://moat-labs-dashboard.vercel.app
 - **Website**: https://www.moatlabs-ventures.com
-- **Discovery call**: https://calendar.app.google/QLhJS3bpbAJfreNXA
+- **Discovery call**: https://calendar.app.google/UgjwZH3X5U8gB3AT9
 - **Figma site**: https://berry-spiny-33866100.figma.site/
 
 ## Architecture

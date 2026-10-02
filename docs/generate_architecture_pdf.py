@@ -501,7 +501,7 @@ def build_pdf():
         ['Resource', 'URL'],
         ['Dashboard', 'https://moat-labs-dashboard.vercel.app'],
         ['Website', 'https://www.moatlabs-ventures.com'],
-        ['Discovery Call', 'https://calendar.app.google/QLhJS3bpbAJfreNXA'],
+        ['Discovery Call', 'https://calendar.app.google/UgjwZH3X5U8gB3AT9'],
         ['Google Sheet', 'docs.google.com/spreadsheets/d/1VcCoM6Un9G5XLddgvPCqc5dj4UCDpI_y76PIUM8fGIo'],
     ]
     t = Table(urls, colWidths=[1.3*inch, 4.8*inch])
