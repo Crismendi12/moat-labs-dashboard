@@ -5,7 +5,7 @@
   var STORAGE_KEY = 'moat_sheet_id';
   var GVIZ_BASE = 'https://docs.google.com/spreadsheets/d/';
 
-  var DEFAULT_SHEET = '1VcCoM6Un9G5XLddgvPCqc5dj4UCDpI_y76PIUM8fGIo';
+  var DEFAULT_SHEET = '1adMI9FgiVyTK2CJd18Bc0AMou7_lN-6mVF56VqUKkF4';
   var sheetId = localStorage.getItem(STORAGE_KEY) || DEFAULT_SHEET;
   var refreshTimer = null;
 
@@ -3605,7 +3605,7 @@
     actions.appendChild(el('button', {
       className: 'drawer__action drawer__action--secondary',
       textContent: 'Open row in sheet',
-      onClick: function () { window.open('https://docs.google.com/spreadsheets/d/1VcCoM6Un9G5XLddgvPCqc5dj4UCDpI_y76PIUM8fGIo', '_blank'); }
+      onClick: function () { window.open('https://docs.google.com/spreadsheets/d/1adMI9FgiVyTK2CJd18Bc0AMou7_lN-6mVF56VqUKkF4', '_blank'); }
     }));
     body.appendChild(actions);
   }

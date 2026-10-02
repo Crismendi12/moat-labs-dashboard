@@ -15,7 +15,7 @@ Dashboard deployed to https://moat-labs-dashboard.vercel.app
 - Vercel for hosting
 
 ## Sheet
-- **ID**: `1VcCoM6Un9G5XLddgvPCqc5dj4UCDpI_y76PIUM8fGIo`
+- **ID**: `1adMI9FgiVyTK2CJd18Bc0AMou7_lN-6mVF56VqUKkF4`
 - **Tabs**: Pipeline, Contenido, Metricas, Contabilidad, Gastos, Outbound, Prospecting
 - **Outbound columns**: Company, Contact, Email, Industry, Score, LinkedIn, Country, Source, Subject(E), Message(F), Status(G), SeqStep(L), LastSent(M)
 - **Prospecting columns**: Fecha, Resultados (AI-generated lead summaries from news)
